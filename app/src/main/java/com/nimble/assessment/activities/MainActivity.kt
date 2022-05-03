@@ -26,6 +26,16 @@ class MainActivity : AppCompatActivity() {
         val adapter = PharmacyListAdapter()
         binding.recyclerView.adapter = adapter
 
+        // Add click listener when clicking order button (Show order page)
+        binding.btnOrder.setOnClickListener {
+
+        }
+
+        // Add item click listener (Show detail page)
+        adapter.setItemClickListener {
+
+        }
+
         // Observe live data
         viewModel.liveData.observe(this) {
             adapter.submitList(it)

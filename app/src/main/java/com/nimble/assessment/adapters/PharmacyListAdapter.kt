@@ -11,7 +11,7 @@ import com.nimble.assessment.repository.entities.Response
 /**
  * [ListAdapter] used to show a list of Pharmacy
  */
-class PharmacyListAdapter: ListAdapter<Response.SimplePharmacy, PharmacyListAdapter.ViewHolder>(DiffCallback) {
+class PharmacyListAdapter(private var listener: ((item: Response.SimplePharmacy) -> Unit)? = null): ListAdapter<Response.SimplePharmacy, PharmacyListAdapter.ViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = RowItemPharmacyBinding.inflate(
@@ -27,9 +27,17 @@ class PharmacyListAdapter: ListAdapter<Response.SimplePharmacy, PharmacyListAdap
         holder.bind(item)
     }
 
-    class ViewHolder(private val binding: RowItemPharmacyBinding): RecyclerView.ViewHolder(binding.root) {
+    fun setItemClickListener(listener: ((item: Response.SimplePharmacy) -> Unit)?) {
+        this.listener = listener
+    }
+
+    inner class ViewHolder(private val binding: RowItemPharmacyBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Response.SimplePharmacy) {
             binding.name.text = item.name
+
+            binding.root.setOnClickListener {
+                listener?.invoke(item)
+            }
         }
     }
 
