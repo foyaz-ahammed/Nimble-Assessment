@@ -2,7 +2,7 @@ package com.nimble.assessment.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import com.nimble.assessment.adapters.PharmacyListAdapter
 import com.nimble.assessment.databinding.ActivityMainBinding
 import com.nimble.assessment.viewmodels.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -23,9 +23,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val adapter = PharmacyListAdapter()
+        binding.recyclerView.adapter = adapter
+
         // Observe live data
         viewModel.liveData.observe(this) {
-            Log.w("MainActivity", it.toString())
+            adapter.submitList(it)
         }
 
         viewModel.loadPharmacyList()
