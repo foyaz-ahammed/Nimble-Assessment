@@ -40,6 +40,13 @@ dependencies {
     implementation "com.google.android.material:material:$versions.google_material"
     implementation "androidx.constraintlayout:constraintlayout:$versions.androidx_constraintlayout"
 
+    //Koin
+    implementation "io.insert-koin:koin-core:$versions.koin"
+    implementation "io.insert-koin:koin-android:$versions.koin"
+
+    //View model
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.androidx_lifecycle_viewmodel"
+
     testImplementation "junit:junit:$versions.junit"
     androidTestImplementation "androidx.test.ext:junit:$versions.test_junit"
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.test_espresso"
