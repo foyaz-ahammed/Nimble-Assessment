@@ -1,6 +1,7 @@
 package com.nimble.assessment.activities
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.nimble.assessment.adapters.MedicationListAdapter
@@ -53,6 +54,15 @@ class OrderActivity: AppCompatActivity() {
             remainingList.remove(it)
             selectedAdapter.submitList(selectedList.clone() as ArrayList<Medication>)
             remainingAdapter.submitList(remainingList.clone() as ArrayList<Medication>)
+        }
+
+        binding.btnOrder.setOnClickListener {
+            if (selectedList.isEmpty()) {
+                Toast.makeText(this, "You should select at least one medication", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            finish()
         }
 
         // Observe medication list data

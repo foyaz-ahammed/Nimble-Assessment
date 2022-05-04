@@ -13,7 +13,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  */
 class MainActivity : AppCompatActivity() {
     // Binding variable
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     // View model
     private val viewModel by viewModel<MainViewModel>()
@@ -46,6 +46,10 @@ class MainActivity : AppCompatActivity() {
         viewModel.liveData.observe(this) {
             adapter.submitList(it)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         viewModel.loadPharmacyList()
     }
