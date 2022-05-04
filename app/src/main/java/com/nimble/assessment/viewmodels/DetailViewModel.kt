@@ -11,6 +11,9 @@ import com.nimble.assessment.repository.entities.LoadResult
 import com.nimble.assessment.repository.entities.Response
 import kotlinx.coroutines.launch
 
+/**
+ * [ViewModel] used to get data on Detail Page
+ */
 class DetailViewModel(private val repository: NimbleRepository): ViewModel() {
 
     private val _pharmacyInfo = MutableLiveData<Response.PharmacyDetail>()

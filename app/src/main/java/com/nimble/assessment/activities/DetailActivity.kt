@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.nimble.assessment.databinding.ActivityDetailBinding
 import com.nimble.assessment.extensions.getFormattedAddress
+import com.nimble.assessment.repository.entities.LoadResult
 import com.nimble.assessment.repository.entities.Response
 import com.nimble.assessment.viewmodels.DetailViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -22,6 +24,9 @@ class DetailActivity: AppCompatActivity() {
     // Binding variable used to inflate layout
     private lateinit var binding: ActivityDetailBinding
 
+    //
+    private var _pharmacyId: String? = null
+
     // View model
     private val viewModel by viewModel<DetailViewModel>()
 
@@ -33,6 +38,11 @@ class DetailActivity: AppCompatActivity() {
 
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
+        // Load data again when we fail loading data
+        binding.btnRetry.setOnClickListener {
+            _pharmacyId?.let { viewModel.loadPharmacy(it) }
+        }
+
         // Observe pharmacy detail data
         viewModel.pharmacyInfo.observe(this) {
             updateViews(it)
@@ -40,11 +50,16 @@ class DetailActivity: AppCompatActivity() {
 
         // Observe load status
         viewModel.loading.observe(this) {
-
+            binding.contentViews.isVisible = it == LoadResult.SUCCESS
+            binding.progressBar.isVisible = it == LoadResult.LOADING
+            binding.errorViews.isVisible = it == LoadResult.FAILURE
         }
 
         intent?.getStringExtra(EXTRA_PHARMACY_ITEM)?.let {
-            viewModel.loadPharmacy(it)
+            _pharmacyId = it
+
+            // We need to avoid loading data again when the activity is recreated
+            if (savedInstanceState == null) viewModel.loadPharmacy(it)
         }
     }
 

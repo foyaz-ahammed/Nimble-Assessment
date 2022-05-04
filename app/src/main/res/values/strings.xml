@@ -5,4 +5,7 @@
     <string name="label_address">Address:</string>
     <string name="hours_label">Hours:</string>
     <string name="label_phone_no">Phone no:</string>
+    <string name="pharmacy_information">Pharmacy information</string>
+    <string name="retry">Retry</string>
+    <string name="error_label">Error loading data. Please try again.</string>
 </resources>
