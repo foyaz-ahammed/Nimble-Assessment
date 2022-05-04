@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Nimble Assessment</string>
     <string name="order_now">Order now</string>
+    <string name="label_name">Name:</string>
+    <string name="label_address">Address:</string>
+    <string name="hours_label">Hours:</string>
+    <string name="label_phone_no">Phone no:</string>
 </resources>

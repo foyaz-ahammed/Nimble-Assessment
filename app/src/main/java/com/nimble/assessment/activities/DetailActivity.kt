@@ -5,6 +5,8 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.nimble.assessment.databinding.ActivityDetailBinding
+import com.nimble.assessment.extensions.getFormattedAddress
+import com.nimble.assessment.repository.entities.Response
 import com.nimble.assessment.viewmodels.DetailViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -33,7 +35,7 @@ class DetailActivity: AppCompatActivity() {
 
         // Observe pharmacy detail data
         viewModel.pharmacyInfo.observe(this) {
-
+            updateViews(it)
         }
 
         // Observe load status
@@ -44,6 +46,16 @@ class DetailActivity: AppCompatActivity() {
         intent?.getStringExtra(EXTRA_PHARMACY_ITEM)?.let {
             viewModel.loadPharmacy(it)
         }
+    }
+
+    /**
+     * Update UI when we get Pharmacy info
+     */
+    private fun updateViews(item: Response.PharmacyDetail) {
+        binding.name.text = item.value.name
+        binding.address.text = item.getFormattedAddress()
+        binding.hours.text = item.value.pharmacyHours?.replace("\\n", "\n") ?: "N/A"
+        binding.phoneNo.text = item.value.primaryPhoneNumber ?: "N/A"
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
