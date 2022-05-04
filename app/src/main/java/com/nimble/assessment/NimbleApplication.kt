@@ -1,6 +1,7 @@
 package com.nimble.assessment
 
 import android.app.Application
+import com.nimble.assessment.modules.networkModule
 import com.nimble.assessment.modules.repositoryModule
 import com.nimble.assessment.modules.viewModelModule
 import org.koin.android.ext.koin.androidContext
@@ -15,7 +16,7 @@ class NimbleApplication: Application() {
 
         startKoin {
             androidContext(this@NimbleApplication)
-            modules(repositoryModule, viewModelModule)
+            modules(repositoryModule, networkModule, viewModelModule)
         }
     }
 }

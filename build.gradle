@@ -8,6 +8,9 @@ buildscript {
             google_material: "1.5.0",
             gson: "2.8.9",
             koin: "3.1.2",
+            moshi: "1.12.0",
+            ok_http: "4.9.0",
+            retrofit: "2.9.0",
 
             junit: "4.13.2",
             test_espresso: "3.4.0",

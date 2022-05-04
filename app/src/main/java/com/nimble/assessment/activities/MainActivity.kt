@@ -1,5 +1,6 @@
 package com.nimble.assessment.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.nimble.assessment.adapters.PharmacyListAdapter
@@ -33,7 +34,10 @@ class MainActivity : AppCompatActivity() {
 
         // Add item click listener (Show detail page)
         adapter.setItemClickListener {
-
+            val intent = Intent(this, DetailActivity::class.java).apply {
+                putExtra(DetailActivity.EXTRA_PHARMACY_ITEM, it.pharmacyId)
+            }
+            startActivity(intent)
         }
 
         // Observe live data
