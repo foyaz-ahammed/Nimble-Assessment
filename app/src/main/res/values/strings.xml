@@ -8,4 +8,6 @@
     <string name="pharmacy_information">Pharmacy information</string>
     <string name="retry">Retry</string>
     <string name="error_label">Error loading data. Please try again.</string>
+    <string name="available_medications">Available medications</string>
+    <string name="selected_medications">Selected medications</string>
 </resources>

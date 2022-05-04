@@ -5,6 +5,7 @@ import com.nimble.assessment.repository.apis.PharmacyAPI
 import com.nimble.assessment.util.Constants
 import com.nimble.assessment.viewmodels.DetailViewModel
 import com.nimble.assessment.viewmodels.MainViewModel
+import com.nimble.assessment.viewmodels.OrderViewModel
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -30,6 +31,7 @@ val networkModule = module {
 val viewModelModule = module {
     viewModel { MainViewModel(get()) }
     viewModel { DetailViewModel(get()) }
+    viewModel { OrderViewModel(get()) }
 }
 
 /**

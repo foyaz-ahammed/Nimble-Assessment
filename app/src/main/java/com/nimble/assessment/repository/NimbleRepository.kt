@@ -8,6 +8,7 @@ import com.nimble.assessment.repository.apis.PharmacyAPI
 import com.nimble.assessment.repository.entities.DataResult
 import com.nimble.assessment.repository.entities.Response
 import com.nimble.assessment.util.Constants
+import java.net.URL
 
 /**
  * Repository class
@@ -43,4 +44,20 @@ class NimbleRepository(private val context: Context, private val api: PharmacyAP
         } catch (e: Exception) {
             DataResult.FAILURE(e)
         }
+
+    /**
+     * Load medications list content (Text separated by comma)
+     */
+    fun loadMedicationsText(callback: (result: DataResult<String>) -> Unit) {
+        val thread = Thread {
+            try {
+                val text = URL(Constants.MEDICATIONS_URL).readText()
+                callback.invoke(DataResult.SUCCESS(text))
+            } catch (e: Exception) {
+                callback.invoke(DataResult.FAILURE(e))
+            }
+        }
+
+        thread.start()
+    }
 }

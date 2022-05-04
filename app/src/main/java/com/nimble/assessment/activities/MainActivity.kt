@@ -29,7 +29,9 @@ class MainActivity : AppCompatActivity() {
 
         // Add click listener when clicking order button (Show order page)
         binding.btnOrder.setOnClickListener {
-
+            val intent = Intent(this, OrderActivity::class.java).apply {
+            }
+            startActivity(intent)
         }
 
         // Add item click listener (Show detail page)
