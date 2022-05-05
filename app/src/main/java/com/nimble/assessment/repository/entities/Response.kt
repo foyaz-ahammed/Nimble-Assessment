@@ -1,7 +1,10 @@
 package com.nimble.assessment.repository.entities
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import java.io.Serializable
 
 /**
  * Network/Local Response class
@@ -10,10 +13,40 @@ class Response {
     data class Pharmacies(
         val pharmacies: List<SimplePharmacy>?
     )
+
     data class SimplePharmacy(
-        var name: String? = null,
-        var pharmacyId: String? = null
-    )
+        var name: String,
+        var pharmacyId: String,
+        var selected: Boolean = false,
+        var isOrdered: Boolean = false,
+    ): Parcelable {
+        constructor(parcel: Parcel) : this(
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.readByte() != 0.toByte()
+        ) {
+        }
+
+        override fun writeToParcel(parcel: Parcel, flags: Int) {
+            parcel.writeString(name)
+            parcel.writeString(pharmacyId)
+            parcel.writeByte(if (selected) 1 else 0)
+        }
+
+        override fun describeContents(): Int {
+            return 0
+        }
+
+        companion object CREATOR : Parcelable.Creator<SimplePharmacy> {
+            override fun createFromParcel(parcel: Parcel): SimplePharmacy {
+                return SimplePharmacy(parcel)
+            }
+
+            override fun newArray(size: Int): Array<SimplePharmacy?> {
+                return arrayOfNulls(size)
+            }
+        }
+    }
 
     @JsonClass(generateAdapter = true)
     data class PharmacyDetail (

@@ -4,11 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nimble.assessment.database.entities.Order
 import com.nimble.assessment.repository.NimbleRepository
 import com.nimble.assessment.repository.entities.DataResult
 import com.nimble.assessment.repository.entities.LoadResult
 import com.nimble.assessment.repository.entities.Medication
+import com.nimble.assessment.repository.entities.Response
+import com.nimble.assessment.util.ensureBackgroundThread
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * [ViewModel] used for Order Page
@@ -40,6 +46,30 @@ class OrderViewModel(private val repository: NimbleRepository): ViewModel() {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Order a list of medications to a list of pharmacies
+     */
+    fun orderMedications(pharmacyList: List<Response.SimplePharmacy>, medicationList: List<Medication>) {
+        val orderList = ArrayList<Order>()
+        val dateFormat = SimpleDateFormat("mm/dd/yyyy", Locale.getDefault())
+        val dateText = dateFormat.format(Date())
+
+        pharmacyList.forEach { simplePharmacy ->
+            medicationList.forEach { medication ->
+                val order = Order(
+                    pharmacyId = simplePharmacy.pharmacyId,
+                    medication = medication.name,
+                    date = dateText
+                )
+                orderList.add(order)
+            }
+        }
+
+        viewModelScope.launch {
+            repository.orderMedications(orderList)
         }
     }
 }

@@ -8,6 +8,7 @@ import com.nimble.assessment.adapters.MedicationListAdapter
 import com.nimble.assessment.databinding.ActivityOrderBinding
 import com.nimble.assessment.repository.entities.LoadResult
 import com.nimble.assessment.repository.entities.Medication
+import com.nimble.assessment.repository.entities.Response
 import com.nimble.assessment.viewmodels.OrderViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -15,6 +16,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  * Activity for order page
  */
 class OrderActivity: AppCompatActivity() {
+    companion object {
+        const val EXTRA_PHARMACY_LIST = "extra_pharmacy_list"
+    }
+
     // Binding variable
     private lateinit var binding: ActivityOrderBinding
 
@@ -25,11 +30,14 @@ class OrderActivity: AppCompatActivity() {
     private val selectedAdapter = MedicationListAdapter()
     private val remainingAdapter = MedicationListAdapter()
 
-    // Selected List
-    private val selectedList = ArrayList<Medication>()
+    // Selected Medication List
+    private val selectedMedicationList = ArrayList<Medication>()
 
-    // Remaining List
-    private val remainingList = ArrayList<Medication>()
+    // Remaining Medication List
+    private val remainingMedicationList = ArrayList<Medication>()
+
+    // Pharmacy List
+    private var pharmacyList: ArrayList<Response.SimplePharmacy>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,36 +50,38 @@ class OrderActivity: AppCompatActivity() {
         binding.remainingRecyclerView.adapter = remainingAdapter
 
         selectedAdapter.setItemCheckChangedListener {
-            remainingList.add(it)
-            remainingList.sortBy { item -> item.name }
-            selectedList.remove(it)
-            selectedAdapter.submitList(selectedList.clone() as ArrayList<Medication>)
-            remainingAdapter.submitList(remainingList.clone() as ArrayList<Medication>)
+            remainingMedicationList.add(it)
+            remainingMedicationList.sortBy { item -> item.name }
+            selectedMedicationList.remove(it)
+            selectedAdapter.submitList(selectedMedicationList.clone() as ArrayList<Medication>)
+            remainingAdapter.submitList(remainingMedicationList.clone() as ArrayList<Medication>)
         }
         remainingAdapter.setItemCheckChangedListener {
-            selectedList.add(it)
-            selectedList.sortBy { item -> item.name }
-            remainingList.remove(it)
-            selectedAdapter.submitList(selectedList.clone() as ArrayList<Medication>)
-            remainingAdapter.submitList(remainingList.clone() as ArrayList<Medication>)
+            selectedMedicationList.add(it)
+            selectedMedicationList.sortBy { item -> item.name }
+            remainingMedicationList.remove(it)
+            selectedAdapter.submitList(selectedMedicationList.clone() as ArrayList<Medication>)
+            remainingAdapter.submitList(remainingMedicationList.clone() as ArrayList<Medication>)
         }
 
         binding.btnOrder.setOnClickListener {
-            if (selectedList.isEmpty()) {
+            if (selectedMedicationList.isEmpty()) {
                 Toast.makeText(this, "You should select at least one medication", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            // Order medications
+            viewModel.orderMedications(pharmacyList ?: emptyList(), selectedMedicationList)
             finish()
         }
 
         // Observe medication list data
         viewModel.medicationList.observe(this) {
-            selectedList.clear()
-            remainingList.clear()
-            remainingList.addAll(it)
-            remainingAdapter.submitList(remainingList.clone() as ArrayList<Medication>)
-            selectedAdapter.submitList(selectedList.clone() as ArrayList<Medication>)
+            selectedMedicationList.clear()
+            remainingMedicationList.clear()
+            remainingMedicationList.addAll(it)
+            remainingAdapter.submitList(remainingMedicationList.clone() as ArrayList<Medication>)
+            selectedAdapter.submitList(selectedMedicationList.clone() as ArrayList<Medication>)
         }
 
         // Observe loading status
@@ -79,6 +89,8 @@ class OrderActivity: AppCompatActivity() {
             binding.contentViews.isVisible = it == LoadResult.SUCCESS
             binding.progressBar.isVisible = it == LoadResult.LOADING
         }
+
+        pharmacyList = intent?.getParcelableArrayListExtra(EXTRA_PHARMACY_LIST)
 
         // Load medications
         if (savedInstanceState == null) {

@@ -1,5 +1,8 @@
 package com.nimble.assessment.modules
 
+import android.content.Context
+import androidx.room.Room
+import com.nimble.assessment.database.NimbleDatabase
 import com.nimble.assessment.repository.NimbleRepository
 import com.nimble.assessment.repository.apis.PharmacyAPI
 import com.nimble.assessment.util.Constants
@@ -18,7 +21,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 val repositoryModule = module {
-    single { NimbleRepository(androidContext(), get()) }
+    single { NimbleRepository(androidContext(), get(), get()) }
 }
 
 val networkModule = module {
@@ -32,6 +35,10 @@ val viewModelModule = module {
     viewModel { MainViewModel(get()) }
     viewModel { DetailViewModel(get()) }
     viewModel { OrderViewModel(get()) }
+}
+
+val databaseModule = module {
+    single { provideDatabase(androidContext()) }
 }
 
 /**
@@ -69,3 +76,12 @@ private fun provideMoshi(): Moshi = Moshi.Builder().build()
  * @return [PharmacyAPI] instance
  */
 private fun provideAPI(retrofit: Retrofit): PharmacyAPI = retrofit.create(PharmacyAPI::class.java)
+
+/**
+ * @return [NimbleDatabase] instance
+ */
+@Synchronized
+private fun provideDatabase(context: Context): NimbleDatabase =
+    Room.databaseBuilder(context.applicationContext, NimbleDatabase::class.java, Constants.DATABASE_NAME)
+        .fallbackToDestructiveMigration()
+        .build()

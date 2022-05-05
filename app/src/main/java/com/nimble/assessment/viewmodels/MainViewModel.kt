@@ -12,15 +12,17 @@ import kotlinx.coroutines.launch
  * View Model used for Main Activity (Home Screen)
  */
 class MainViewModel(private val repository: NimbleRepository): ViewModel() {
-    private val _liveData = MutableLiveData<List<Response.SimplePharmacy>>()
+    private val _pharmacyList = MutableLiveData<List<Response.SimplePharmacy>>()
 
-    val liveData: LiveData<List<Response.SimplePharmacy>>
-        get() = _liveData
+    val pharmacyList: LiveData<List<Response.SimplePharmacy>>
+        get() = _pharmacyList
 
     fun loadPharmacyList() {
         viewModelScope.launch {
             val result = repository.loadPharmacyListFromJson()
-            _liveData.value = result
+            _pharmacyList.value = result
         }
     }
+
+    fun getOrderList() = repository.getOrderList()
 }
