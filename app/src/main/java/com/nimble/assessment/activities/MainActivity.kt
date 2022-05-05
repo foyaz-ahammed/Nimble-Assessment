@@ -71,9 +71,11 @@ class MainActivity : AppCompatActivity() {
             Log.w("MainActivity", pharmacyList.toString())
             adapter.submitList(it)
         }
+    }
 
-        if (savedInstanceState == null) {
-            viewModel.loadPharmacyList()
-        }
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.loadPharmacyList()
     }
 }

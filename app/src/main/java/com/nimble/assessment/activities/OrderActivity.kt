@@ -74,6 +74,9 @@ class OrderActivity: AppCompatActivity() {
             viewModel.orderMedications(pharmacyList ?: emptyList(), selectedMedicationList)
             finish()
         }
+        binding.btnRetry.setOnClickListener {
+            viewModel.loadMedications()
+        }
 
         // Observe medication list data
         viewModel.medicationList.observe(this) {
@@ -88,6 +91,7 @@ class OrderActivity: AppCompatActivity() {
         viewModel.loading.observe(this) {
             binding.contentViews.isVisible = it == LoadResult.SUCCESS
             binding.progressBar.isVisible = it == LoadResult.LOADING
+            binding.errorViews.isVisible = it == LoadResult.FAILURE
         }
 
         pharmacyList = intent?.getParcelableArrayListExtra(EXTRA_PHARMACY_LIST)
