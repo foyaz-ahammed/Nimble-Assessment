@@ -2,6 +2,8 @@ package com.nimble.assessment.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -41,6 +43,8 @@ class PharmacyListAdapter(
     inner class ViewHolder(private val binding: RowItemPharmacyBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Response.SimplePharmacy) {
             binding.name.text = item.name
+            binding.check.isInvisible = item.isOrdered
+            binding.ordered.isVisible = item.isOrdered
 
             binding.check.setOnCheckedChangeListener { _, checked ->
                 itemCheckChangeListener?.invoke(item, checked)
@@ -63,7 +67,7 @@ class PharmacyListAdapter(
             oldItem: Response.SimplePharmacy,
             newItem: Response.SimplePharmacy
         ): Boolean {
-            return oldItem.name == newItem.name
+            return oldItem.name == newItem.name && oldItem.selected == newItem.selected && oldItem.isOrdered == newItem.isOrdered
         }
     }
 }

@@ -29,7 +29,6 @@ class DetailViewModel(private val repository: NimbleRepository): ViewModel() {
             _loading.value = LoadResult.LOADING
             when (val result = repository.fetchPharmacyDetail(pharmacyId)) {
                 is DataResult.SUCCESS -> {
-                    Log.w("DetailViewModel", result.data.toString())
                     _pharmacyInfo.value = result.data
                     _loading.value = LoadResult.SUCCESS
                 }

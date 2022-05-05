@@ -20,9 +20,12 @@ class MainViewModel(private val repository: NimbleRepository): ViewModel() {
     fun loadPharmacyList() {
         viewModelScope.launch {
             val result = repository.loadPharmacyListFromJson()
+            val orderList = repository.getOrderList()
+            for (i in result.indices) {
+                result[i].isOrdered = orderList.count { order -> order.pharmacyId == result[i].pharmacyId } > 0
+            }
+
             _pharmacyList.value = result
         }
     }
-
-    fun getOrderList() = repository.getOrderList()
 }

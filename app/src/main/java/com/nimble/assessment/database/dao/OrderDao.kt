@@ -1,6 +1,5 @@
 package com.nimble.assessment.database.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -15,5 +14,5 @@ interface OrderDao {
     suspend fun addOrderList(order: List<Order>)
 
     @Query("select * from order_table")
-    fun getOrderList(): LiveData<List<Order>>
+    suspend fun getOrderList(): List<Order>
 }

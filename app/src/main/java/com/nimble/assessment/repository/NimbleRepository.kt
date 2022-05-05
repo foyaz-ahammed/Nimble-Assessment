@@ -69,5 +69,5 @@ class NimbleRepository(private val context: Context, private val api: PharmacyAP
         nimbleDatabase.orderDao().addOrderList(list)
     }
 
-    fun getOrderList() = nimbleDatabase.orderDao().getOrderList()
+    suspend fun getOrderList() = nimbleDatabase.orderDao().getOrderList()
 }

@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
     private val viewModel by viewModel<MainViewModel>()
 
     private val pharmacyList = ArrayList<Response.SimplePharmacy>()
-    private val orderList = ArrayList<Order>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,20 +68,8 @@ class MainActivity : AppCompatActivity() {
             pharmacyList.clear()
             pharmacyList.addAll(it)
 
-            for (i in 0 until pharmacyList.size) {
-                pharmacyList[i].isOrdered = orderList.count { order -> order.pharmacyId == pharmacyList[i].pharmacyId } > 0
-            }
-            adapter.submitList(pharmacyList.clone() as ArrayList<Response.SimplePharmacy>)
-        }
-        // Observe order list
-        viewModel.getOrderList().observe(this) {
-            orderList.clear()
-            orderList.addAll(it)
-
-            for (i in 0 until pharmacyList.size) {
-                pharmacyList[i].isOrdered = orderList.count { order -> order.pharmacyId == pharmacyList[i].pharmacyId } > 0
-            }
-            adapter.submitList(pharmacyList.clone() as ArrayList<Response.SimplePharmacy>)
+            Log.w("MainActivity", pharmacyList.toString())
+            adapter.submitList(it)
         }
 
         if (savedInstanceState == null) {

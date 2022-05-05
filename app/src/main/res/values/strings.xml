@@ -11,4 +11,5 @@
     <string name="available_medications">Available medications</string>
     <string name="selected_medications">Selected medications</string>
     <string name="order">Order</string>
+    <string name="ordered">Ordered</string>
 </resources>
